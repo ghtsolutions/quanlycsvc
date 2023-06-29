@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { QrcodeService } from '../qrcode.service';
 import { MatDialog } from '@angular/material/dialog';
+import { WebcamImage } from 'ngx-webcam';
+import { Observable, Subject } from 'rxjs';
 @Component({
   selector: 'app-quetqrcode',
   templateUrl: './quetqrcode.component.html',
@@ -13,12 +15,16 @@ import { MatDialog } from '@angular/material/dialog';
 export class QuetqrcodeComponent implements AfterViewInit{
   Ketqua:any={Tieude:''};
   Detail:any={}
-  IsshowCam:boolean=true;
-  displayedColumns: string[] = ['qrcode', 'Tieude', 'Mota', 'Ngaytao'];
+  IsshowCam:boolean=false;
+  displayedColumns: string[] = ['hinhanh', 'Tieude', 'Mota', 'Ngaytao','qrcode'];
   dataSource!: MatTableDataSource<any>;
-  Listdata:any[]=[]
+  Listdata:any[]=[];
+  public showWebcam = true;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('canvas') canvas!: ElementRef;
+  public webcamImage: WebcamImage | undefined;
+  private trigger: Subject<void> = new Subject<void>();
   constructor(
     private _QrcodeService:QrcodeService,
     private dialog:MatDialog,
@@ -28,6 +34,8 @@ export class QuetqrcodeComponent implements AfterViewInit{
     {
       this.Listdata = data
       this.dataSource = new MatTableDataSource(data);
+      console.log(data);
+      
     })
   }
   text = 'Hello, QR Code!';
@@ -75,6 +83,17 @@ export class QuetqrcodeComponent implements AfterViewInit{
   Today()
   {
     return new Date();
+  }
+  public handleImage(webcamImage: WebcamImage): void {
+    console.info('received webcam image', webcamImage.imageAsDataUrl);
+    this.webcamImage = webcamImage;
+    this.Detail.Hinhanh = webcamImage.imageAsDataUrl
+  }
+  public triggerSnapshot(): void {
+    this.trigger.next();
+  }
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
   }
 }
 

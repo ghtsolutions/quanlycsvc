@@ -16,6 +16,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { ListthietbiComponent } from './listthietbi/listthietbi.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WebcamModule } from 'ngx-webcam';
 @NgModule({
   declarations: [	
     AppComponent,
@@ -37,6 +38,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     HttpClientModule,
     MaterialModule,
+    WebcamModule,
     RouterModule.forRoot([
       // { path: '', pathMatch: 'full', redirectTo: 'quetqr' },
       {
