@@ -27,6 +27,7 @@
     "@nrwl/angular": "14.8.8",
     "@zxing/ngx-scanner": "^16.0.1",
     "angular-cli-ghpages": "^1.0.6",
+    "angular-notifier": "^14.0.0",
     "angularx-qrcode": "^14.0.0",
     "ngx-webcam": "^0.4.1",
     "reflect-metadata": "^0.1.13",

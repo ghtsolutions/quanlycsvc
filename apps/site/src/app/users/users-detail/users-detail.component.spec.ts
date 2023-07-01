@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { QuetqrcodeComponent } from './quetqrcode.component';
+import { UsersDetailComponent } from './users-detail.component';
 
-describe('QuetqrcodeComponent', () => {
-  let component: QuetqrcodeComponent;
-  let fixture: ComponentFixture<QuetqrcodeComponent>;
+describe('UsersDetailComponent', () => {
+  let component: UsersDetailComponent;
+  let fixture: ComponentFixture<UsersDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuetqrcodeComponent ]
+      declarations: [ UsersDetailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QuetqrcodeComponent);
+    fixture = TestBed.createComponent(UsersDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
