@@ -63,9 +63,13 @@ import { TrangchuComponent } from './trangchu/trangchu.component';
         canActivateChild: [AuthGuard],
         component: MainComponent,
         children:[
+          // {
+          //   path: '',
+          //   component: TrangchuComponent
+          // },
           {
-            path: '',
-            component: TrangchuComponent
+            path: 'thietbi',
+            component: ListthietbiComponent
           },
           {
             path: 'caidat',

@@ -6,6 +6,6 @@ import { ListthietbiComponent } from './listthietbi.component';
   imports: [
     CommonModule
   ],
-  declarations: [ListthietbiComponent]
+  declarations: []
 })
 export class ListthietbiModule { }

@@ -9,6 +9,7 @@ import { WebcamImage } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { UsersService } from '../shared/users.service';
 import { Router } from '@angular/router';
+import { TrangchuComponent } from '../trangchu/trangchu.component';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -32,7 +33,7 @@ export class MainComponent implements OnInit {
     private _QrcodeService:QrcodeService,
     private _UsersService:UsersService,
     private dialog:MatDialog,
-    private router: Router
+    private router: Router,
   ) {
     this._UsersService.getProfile().subscribe(data=>this.CUser = data)
     this._QrcodeService.getAll().subscribe()

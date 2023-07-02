@@ -38,7 +38,6 @@ export class QrcodeService {
       switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/testapi`, dulieu).pipe(
         map((res: any) => {
           this._testapis.next([res[1], ...datas]);
-          console.log(res);
           return res[1];
         })
       ))
