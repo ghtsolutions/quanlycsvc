@@ -21,7 +21,7 @@ export class ApinhanhService {
     return this._sanpham.asObservable();
   }
   getToken(data: any): Observable<any> {
-    return this._httpClient.post<any>(`${this.APIURL}/apinhanh/gettoken`,data).pipe(
+    return this._httpClient.post<any>(`${this.APIURL}/test_apinhanh/gettoken`,data).pipe(
       tap((response: any) => {
             if(response.code!=0)
             {
@@ -36,7 +36,7 @@ export class ApinhanhService {
     );
   }
   getSanpham(data: any): Observable<any> {
-    return this._httpClient.post<any>(`${this.APIURL}/apinhanh/getsanpham`,data).pipe(
+    return this._httpClient.post<any>(`${this.APIURL}/test_apinhanh/getsanpham`,data).pipe(
       tap((response: any) => {
                 console.log(response);
                 return response      
@@ -44,7 +44,7 @@ export class ApinhanhService {
     );
   }
   getByid(id: any): Observable<any> {
-    return this._httpClient.get<any>(`${this.APIURL}/sanpham/id`).pipe(
+    return this._httpClient.get<any>(`${this.APIURL}/test_sanpham/id`).pipe(
       tap((response: any) => {
         this._sanpham.next(response);
         console.log(response);
@@ -52,7 +52,7 @@ export class ApinhanhService {
     );
   }
   getAll(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this.APIURL}/sanpham`).pipe(
+    return this._httpClient.get<any[]>(`${this.APIURL}/test_sanpham`).pipe(
       tap((response: any[]) => {
         this._sanphams.next(response);
       })
@@ -61,7 +61,7 @@ export class ApinhanhService {
   createSanpham(dulieu: any): Observable<any> {
     return this.sanphams$.pipe(
       take(1),
-      switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/sanpham`, dulieu).pipe(
+      switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/test_sanpham`, dulieu).pipe(
         map((res: any) => {
           this._sanphams.next([res[1], ...datas]);
           console.log(res);
@@ -74,7 +74,7 @@ export class ApinhanhService {
     return this.sanphams$.pipe(
       take(1),
       switchMap((sanphams: any) =>
-        this._httpClient.patch(`${this.APIURL}/sanpham/${dulieu.id}`, dulieu).pipe(
+        this._httpClient.patch(`${this.APIURL}/test_sanpham/${dulieu.id}`, dulieu).pipe(
           map((sanpham: any) => {
             const index = sanphams.findIndex((item: any) => item.id === sanpham.id);
             sanphams[index] = sanpham;
@@ -88,7 +88,7 @@ export class ApinhanhService {
     return this.sanphams$.pipe(
       take(1),
       switchMap((sanphams: any) =>
-        this._httpClient.delete(`${this.APIURL}/sanpham/${dulieu.id}`).pipe(
+        this._httpClient.delete(`${this.APIURL}/test_sanpham/${dulieu.id}`).pipe(
           map((isDelete) => {
             const updatePhanquyens = sanphams.filter((e: any) => e.id != dulieu.id);
             this._sanphams.next(updatePhanquyens);

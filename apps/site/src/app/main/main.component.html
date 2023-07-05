@@ -10,9 +10,6 @@
                         <zxing-scanner #scanner (scanSuccess)="onScanSuccess($event)"></zxing-scanner>
                       </ng-container>
                       <ng-template #elseTemplate>
-                        <!-- <div class="text-center py-2">
-                          <button mat-raised-button color="primary" (click)="startScanner()">Quét QR</button>
-                        </div> -->
                         <div class="p-3 text-red-500 text-center" *ngIf="Ketqua.Tieude">
                             {{Ketqua.Tieude}} - Quẹt Lúc : {{Today()|date:'dd/MM/yyyy'}}
                         </div>
@@ -24,6 +21,7 @@
                     <div><button [disabled]="IsshowCam" mat-fab color="primary" (click)="startScanner()"  *ngIf="isActive('/')">
                       <span class="material-icons">qr_code_scanner</span></button></div>
                     <div><button mat-raised-button routerLink="/" [color]="isActive('/') ? 'primary' : null" *ngIf="!isActive('/')"><span class="material-icons">home</span></button></div>
+                    <div><button mat-raised-button  routerLink="thietbi" [color]="isActive('/thietbi') ? 'primary' : null">Thiết Bị</button></div>
                     <div><button mat-raised-button  routerLink="caidat" [color]="isActive('/caidat') ? 'primary' : null">Cài Đặt</button></div>
                   </div>
              </div>

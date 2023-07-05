@@ -17,14 +17,14 @@ export class CauhinhchungService {
     return this._cauhinhchung.asObservable();
   }
   getByid(id: any): Observable<any> {
-    return this._httpClient.get<any>(`${this.APIURL}/hderma-cauhinh/${id}`).pipe(
+    return this._httpClient.get<any>(`${this.APIURL}/test_hderma-cauhinh/${id}`).pipe(
       tap((response: any) => {
         this._cauhinhchung.next(response);
       })
     );
   }
   getAll(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this.APIURL}/hderma-cauhinh`).pipe(
+    return this._httpClient.get<any[]>(`${this.APIURL}/test_hderma-cauhinh`).pipe(
       tap((response: any[]) => {
         this._cauhinhchungs.next(response);
       })
@@ -33,7 +33,7 @@ export class CauhinhchungService {
   createCauhinhchung(dulieu: any): Observable<any> {
     return this.cauhinhchungs$.pipe(
       take(1),
-      switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/hderma-cauhinh`, dulieu).pipe(
+      switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/test_hderma-cauhinh`, dulieu).pipe(
         map((res: any) => {
           this._cauhinhchungs.next([res[1], ...datas]);
           console.log(res);
@@ -46,7 +46,7 @@ export class CauhinhchungService {
     return this.cauhinhchungs$.pipe(
       take(1),
       switchMap((cauhinhchungs: any) =>
-        this._httpClient.patch(`${this.APIURL}/hderma-cauhinh/${dulieu.id}`, dulieu).pipe(
+        this._httpClient.patch(`${this.APIURL}/test_hderma-cauhinh/${dulieu.id}`, dulieu).pipe(
           map((cauhinhchung: any) => {
             const index = cauhinhchungs.findIndex((item: any) => item.id === cauhinhchung.id);
             cauhinhchungs[index] = cauhinhchung;
@@ -60,7 +60,7 @@ export class CauhinhchungService {
     return this.cauhinhchungs$.pipe(
       take(1),
       switchMap((cauhinhchungs: any) =>
-        this._httpClient.delete(`${this.APIURL}/hderma-cauhinh/${dulieu.id}`).pipe(
+        this._httpClient.delete(`${this.APIURL}/test_hderma-cauhinh/${dulieu.id}`).pipe(
           map((isDelete) => {
             const updatePhanquyens = cauhinhchungs.filter((e: any) => e.id != dulieu.id);
             this._cauhinhchungs.next(updatePhanquyens);

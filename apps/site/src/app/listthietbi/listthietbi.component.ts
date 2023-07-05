@@ -3,10 +3,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { QrcodeService } from '../qrcode.service';
+import { QrcodeService } from '../thietbi.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WebcamImage } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
+import { LichsuService } from '../lichsu.service';
 @Component({
   selector: 'app-listthietbi',
   templateUrl: './listthietbi.component.html',
@@ -15,8 +16,14 @@ import { Observable, Subject } from 'rxjs';
 export class ListthietbiComponent implements OnInit {
   Ketqua:any={Tieude:''};
   Detail:any={}
+  DVT:any=[
+    {id:1,Tieude:'Giờ'},
+    {id:2,Tieude:'Ngày'},
+    {id:3,Tieude:'Tháng'},
+    {id:4,Tieude:'Năm'}
+  ]
   IsshowCam:boolean=false;
-  displayedColumns: string[] = ['hinhanh', 'Tieude', 'Mota', 'Ngaytao','qrcode'];
+  displayedColumns: string[] = ['qrcode','hinhanh', 'Tieude', 'Mota','Tinhtrang','HSD','Ngaytao'];
   dataSource!: MatTableDataSource<any>;
   Listdata:any[]=[];
   public showWebcam = true;
@@ -27,15 +34,20 @@ export class ListthietbiComponent implements OnInit {
   private trigger: Subject<void> = new Subject<void>();
   constructor(
     private _QrcodeService:QrcodeService,
+    private _LichsuService:LichsuService,
     private dialog:MatDialog,
   ) {
     this._QrcodeService.getAll().subscribe()
-    this._QrcodeService.testapis$.subscribe((data)=>
+    this._QrcodeService.thietbis$.subscribe((data)=>
     {
+      if(data)
+      {
+        console.log(data);  
       this.Listdata = data
       this.dataSource = new MatTableDataSource(data);
-      console.log(data);
-      
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      }
     })
   }
   ngOnInit(): void {
@@ -45,27 +57,6 @@ export class ListthietbiComponent implements OnInit {
   @ViewChild('scanner', { static: false })
   scanner: ZXingScannerComponent = new ZXingScannerComponent;
   selectedDevice: MediaDeviceInfo | undefined;
-  // stopScanner() {
-  //   this.IsshowCam = false
-  //   if (this.scanner) {
-  //     this.scanner.scanStop();
-  //   }
-  // }
-  // startScanner() {
-  //   this.IsshowCam = true
-  //   if (this.scanner) {
-  //     this.scanner.scanStart();
-  //   }
-  // }
-  // onScanSuccess(result: string) {
-  //   this.Ketqua = this.Listdata.find(v=>v.id==result)
-  //   this.stopScanner()
-  // }
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -81,7 +72,29 @@ export class ListthietbiComponent implements OnInit {
   {
     this._QrcodeService.createPage(data).subscribe(()=>
     {
-      this._QrcodeService.testapis$.subscribe((data)=>{
+      this._QrcodeService.thietbis$.subscribe((data)=>{
+        this.dataSource = new MatTableDataSource(data);  
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+       })
+    })
+  }
+  UpdateThietbi(data:any)
+  {
+    this._QrcodeService.updatePage(data).subscribe(()=>
+    {
+      this._QrcodeService.thietbis$.subscribe((data)=>{
+        this.dataSource = new MatTableDataSource(data);  
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+       })
+    })
+  }
+  DeleteThietbi(data:any)
+  {
+    this._QrcodeService.deletePage(data).subscribe(()=>
+    {
+      this._QrcodeService.thietbis$.subscribe((data)=>{
         this.dataSource = new MatTableDataSource(data);  
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

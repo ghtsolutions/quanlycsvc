@@ -1,3 +1,13 @@
-<p>
-  lichsu works!
-</p>
+<div class="flex flex-col">
+  <mat-form-field appearance="outline" class="text-xs w-full">
+    <mat-label>Tìm Kiếm</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
+  </mat-form-field> 
+<div *ngFor="let item of FilterListData" class="p-4 font-bold hover:bg-slate-200 {{item.Type==1?'text-red-600':'text-green-600'}}">
+    {{item.User.Hoten}}({{item.User.SDT}}) - {{item.Thietbi.Tieude}} - {{item.Type==1?"Đang Sử Dụng":"Đã Trả"}}  - {{item.Ngaytao|date:'dd/MM/yyyy'}}
+</div>
+<div *ngIf="FilterListData.length==0">
+        Không Tìm Thấy
+</div>
+
+</div>

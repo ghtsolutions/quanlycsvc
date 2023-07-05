@@ -32,17 +32,17 @@ export class AuthService {
   //     return this.currentUserSubject.value;
   // }
   set accessToken(token: string) {
-    localStorage.setItem('HdermaToken', token);
+    localStorage.setItem('CSVC_Token', token);
   }
 
   get accessToken(): string {
-    return localStorage.getItem('HdermaToken') ?? '';
+    return localStorage.getItem('CSVC_Token') ?? '';
   }
   Dangnhap(user: any): Observable<any> {
     if (this._authenticated) {
       return of([false, 'User Đã Đăng Nhập']);
     }
-    return this._httpClient.post(`${this.APIURL}/hderma_auth/login`, user).pipe(
+    return this._httpClient.post(`${this.APIURL}/test_auth/login`, user).pipe(
       switchMap((response: any) => {
         console.log(response);
         
@@ -59,7 +59,7 @@ export class AuthService {
       return of(true);
     }
     if (!this.accessToken || this.accessToken === 'undefined') {
-      localStorage.removeItem('HdermaToken');
+      localStorage.removeItem('CSVC_Token');
       return of(false);
     }
     if (AuthUtils.isTokenExpired(this.accessToken)) {
@@ -69,15 +69,15 @@ export class AuthService {
     // return this.signInUsingToken();
   }
   Dangxuat(): Observable<any> {
-    localStorage.removeItem('HdermaToken');
+    localStorage.removeItem('CSVC_Token');
     this._authenticated = false;
     return of(true);
   }
   // Dangnhap(user: User): Observable<any> {
-  //   return this._httpClient.post<any>(`${this.APIURL}/auth/login`, user)
+  //   return this._httpClient.post<any>(`${this.APIURL}/test_auth/login`, user)
   // }
   // signInUsingToken(): Observable<any> {
-  //     return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, { access_token: this.accessToken }).pipe(
+  //     return this._httpClient.post(`${environment.APIURL}/test_auth/signbytoken`, { access_token: this.accessToken }).pipe(
   //         switchMap((response: any) => {
   //             if (response !== false) {
   //                 this._authenticated = true;
@@ -112,7 +112,7 @@ export class AuthService {
   //     return this.signInUsingToken();
   // }
   // CheckMenu(): Observable<any> {
-  //     return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, { access_token: this.accessToken }).pipe(
+  //     return this._httpClient.post(`${environment.APIURL}/test_auth/signbytoken`, { access_token: this.accessToken }).pipe(
   //         switchMap((response: any) => {
   //             if (response !== false) {
   //                 const Menus = [];

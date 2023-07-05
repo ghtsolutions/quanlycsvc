@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { QrcodeService } from '../qrcode.service';
+import { QrcodeService } from '../thietbi.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WebcamImage } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
@@ -30,7 +30,7 @@ export class QuetqrcodeComponent implements AfterViewInit{
     private dialog:MatDialog,
   ) {
     this._QrcodeService.getAll().subscribe()
-    this._QrcodeService.testapis$.subscribe((data)=>
+    this._QrcodeService.thietbis$.subscribe((data)=>
     {
       this.Listdata = data
       this.dataSource = new MatTableDataSource(data);

@@ -7,13 +7,8 @@ import {
   take,
   switchMap,
   map,
-  filter,
-  throwError,
-  of,
-  catchError,
-  ReplaySubject,
 } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +16,7 @@ export class UsersService {
   private _users: BehaviorSubject<any[] | any> = new BehaviorSubject(null);
   private _user: BehaviorSubject<any | any> = new BehaviorSubject(null);
   private _profile: BehaviorSubject<any | any> = new BehaviorSubject(null);
+  private _cauhinhuser: BehaviorSubject<any[] | any> = new BehaviorSubject(null);
   private APIURL: string = environment.APIURL;
   constructor(private _httpClient: HttpClient) {}
   get users$(): Observable<any[]> {
@@ -29,21 +25,16 @@ export class UsersService {
   get user$(): Observable<any> {
     return this._user.asObservable();
   }
-  get profile$(): Observable<any>
-  {
-      return this._profile.asObservable();
+  get profile$(): Observable<any> {
+    return this._profile.asObservable();
+  }
+  get cauhinhuser$(): Observable<any> {
+    return this._cauhinhuser.asObservable();
   }
   getUsers(): Observable<any[]> {
     return this._httpClient.get<any[]>(`${this.APIURL}/test_users`).pipe(
       tap((ves: any[]) => {
         this._users.next(ves);
-      })
-    );
-  }
-  getAdmin(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this.APIURL}/test_users/get/admin`).pipe(
-      tap((ves: any[]) => {
-          return ves
       })
     );
   }
@@ -73,32 +64,46 @@ export class UsersService {
       )
     );
   }
-  updateOneUser(dulieu: any): Observable<any> {
-    console.log(dulieu);
-
-    return this._httpClient.patch(`${this.APIURL}/test_users/${dulieu.id}`, dulieu).pipe(
-      map((user:any) => {
-        this._profile.next(user);
-      })
-    )
-  }
-changepass(data:any): Observable<any> {
+  changepass(data:any): Observable<any> {
      return this._httpClient.post(`${environment.APIURL}/test_auth/changepass`, data).pipe(
         tap((response: any) => {
                 return response;
         })
     );
 }
-Randompass(data:any): Observable<any> {
-  return this._httpClient.post(`${environment.APIURL}/test_auth/randompass`, data).pipe(
-     tap((response: any) => {
-             return response;
-     })
- );
+  Randompass(data:any): Observable<any> {
+     return this._httpClient.post(`${environment.APIURL}/test_auth/randompass`, data).pipe(
+        tap((response: any) => {
+                return response;
+        })
+    );
+}
+
+getCauhinhUser(): Observable<any[]> {
+  return this._httpClient.get<any[]>(`${this.APIURL}/test_cauhinh`).pipe(
+    tap((data: any[]) => {
+      this._cauhinhuser.next(data);
+    })
+  );
+}
+updateCauhinhUser(dulieu: any): Observable<any> {
+  return this.cauhinhuser$.pipe(
+    take(1),
+    switchMap((datas: any) =>
+      this._httpClient.patch(`${this.APIURL}/test_cauhinh/${dulieu.id}`, dulieu).pipe(
+        map((data:any) => {
+          const index = datas.findIndex((item: any) => item.id === data.id);
+          datas[index] = data;
+          this._cauhinhuser.next(datas);
+          return data;
+        })
+      )
+    )
+  );
 }
 getProfile(): Observable<any> {
     return this._httpClient.get<any>(`${this.APIURL}/test_auth/profile`).pipe(
-      tap((response: any) => {   
+      tap((response) => {
         this._profile.next(response);
       })
     );

@@ -3,13 +3,15 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { QrcodeService } from '../qrcode.service';
+import { QrcodeService } from '../thietbi.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WebcamImage } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { UsersService } from '../shared/users.service';
 import { Router } from '@angular/router';
 import { TrangchuComponent } from '../trangchu/trangchu.component';
+import { LichsuService } from '../lichsu.service';
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -31,18 +33,20 @@ export class MainComponent implements OnInit {
   private trigger: Subject<void> = new Subject<void>();
   constructor(
     private _QrcodeService:QrcodeService,
+    private _LichsuService:LichsuService,
     private _UsersService:UsersService,
+    private _NotifierService:NotifierService,
     private dialog:MatDialog,
     private router: Router,
   ) {
     this._UsersService.getProfile().subscribe(data=>this.CUser = data)
     this._QrcodeService.getAll().subscribe()
-    this._QrcodeService.testapis$.subscribe((data)=>
+    this._QrcodeService.thietbis$.subscribe((data)=>
     {
       this.Listdata = data
       this.dataSource = new MatTableDataSource(data);
-      console.log(data); 
     })
+    
   }
   ngOnInit(): void {
   }
@@ -66,9 +70,25 @@ export class MainComponent implements OnInit {
       this.scanner.scanStart();
     }
   }
-  onScanSuccess(result: string) {
-    this.Ketqua = this.Listdata.find(v=>v.id==result)
+  onScanSuccess(data: string) {
+    const result = this.Listdata.find(v=>v.id==data)
+    if(result)
+    {
+    let dulieu:any={};
+    dulieu.idTao = dulieu.idUser = this.CUser.id
+    dulieu.idTB = result.id
+    dulieu.Type = result.Tinhtrang =!result.Tinhtrang
+    this._QrcodeService.updatePage(result).subscribe();
+    this._LichsuService.createPage(dulieu).subscribe((data)=>
+    {
+        this.router.navigateByUrl('/lichsu'); 
+    })
     this.stopScanner()
+    }
+    else
+    {
+      this._NotifierService.notify('error','Thiết bị không tồn tại trong hệ thống')
+    }
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

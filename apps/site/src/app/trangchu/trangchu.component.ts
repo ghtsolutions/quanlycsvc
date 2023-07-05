@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { QrcodeService } from '../qrcode.service';
+import { QrcodeService } from '../thietbi.service';
 import { UsersService } from '../shared/users.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class TrangchuComponent implements OnInit {
   ) {
     this._UsersService.getProfile().subscribe(data=>this.CUser = data)
     this._QrcodeService.getAll().subscribe()
-    this._QrcodeService.testapis$.subscribe((data)=>
+    this._QrcodeService.thietbis$.subscribe((data)=>
     {
       this.Listdata = data
     })

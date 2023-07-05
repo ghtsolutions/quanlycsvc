@@ -17,7 +17,7 @@ export class SitemapService {
     return this._configemail.asObservable();
   }
   getByid(id: any): Observable<any> {
-    return this._httpClient.get<any>(`${this.APIURL}/configemail/id`).pipe(
+    return this._httpClient.get<any>(`${this.APIURL}/test_configemail/id`).pipe(
       tap((response: any) => {
         this._configemail.next(response);
         console.log(response);
@@ -25,7 +25,7 @@ export class SitemapService {
     );
   }
   getAll(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this.APIURL}/configemail`).pipe(
+    return this._httpClient.get<any[]>(`${this.APIURL}/test_configemail`).pipe(
       tap((response: any[]) => {
         this._configemails.next(response);
       })
@@ -34,7 +34,7 @@ export class SitemapService {
   createConfigEmail(dulieu: any): Observable<any> {
     return this.configemails$.pipe(
       take(1),
-      switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/configemail`, dulieu).pipe(
+      switchMap(datas => this._httpClient.post<any>(`${this.APIURL}/test_configemail`, dulieu).pipe(
         map((res: any) => {
           this._configemails.next([res[1], ...datas]);
           console.log(res);
@@ -47,7 +47,7 @@ export class SitemapService {
     return this.configemails$.pipe(
       take(1),
       switchMap((configemails: any) =>
-        this._httpClient.patch(`${this.APIURL}/configemail/${dulieu.id}`, dulieu).pipe(
+        this._httpClient.patch(`${this.APIURL}/test_configemail/${dulieu.id}`, dulieu).pipe(
           map((configemail: any) => {
             const index = configemails.findIndex((item: any) => item.id === configemail.id);
             configemails[index] = configemail;
@@ -61,7 +61,7 @@ export class SitemapService {
     return this.configemails$.pipe(
       take(1),
       switchMap((configemails: any) =>
-        this._httpClient.delete(`${this.APIURL}/configemail/${dulieu.id}`).pipe(
+        this._httpClient.delete(`${this.APIURL}/test_configemail/${dulieu.id}`).pipe(
           map((isDelete) => {
             const updatePhanquyens = configemails.filter((e: any) => e.id != dulieu.id);
             this._configemails.next(updatePhanquyens);
