@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material.module';
 import { RouterModule } from '@angular/router';
-import { HosoComponent } from './hoso/hoso.component';
-import { HocvanComponent } from './hocvan/hocvan.component';
-import { SanphamComponent } from './sanpham/sanpham.component';
 import { MainComponent } from './main/main.component';
-import { BlogComponent } from './blog/blog.component';
 import { QuetqrcodeComponent } from './quetqrcode/quetqrcode.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
@@ -31,12 +26,7 @@ import { TrangchuComponent } from './trangchu/trangchu.component';
 @NgModule({
   declarations: [	
     AppComponent,
-    NxWelcomeComponent,
-    HosoComponent,
-    HocvanComponent,
-    SanphamComponent,
     MainComponent,
-    BlogComponent,
     QuetqrcodeComponent,
     ListthietbiComponent,
     DangnhapComponent,
@@ -81,18 +71,6 @@ import { TrangchuComponent } from './trangchu/trangchu.component';
           },
         ]
       },
-      // {
-      //   path: '', 
-      //   canActivate: [AdminGuard],
-      //   component: QuetqrcodeComponent,
-      //   // children:[
-      //   //   { path: 'quetqr', component:QuetqrcodeComponent },
-      //   //   { path: 'ho-so', component:HosoComponent },
-      //   //   { path: 'hoc-van', component: HocvanComponent },
-      //   //   { path: 'san-pham', component: SanphamComponent },
-      //   //   { path: 'blog', component: BlogComponent },
-      //   // ] 
-      // },
       {
         path: 'dangnhap',
         canActivate: [GuestGuard],

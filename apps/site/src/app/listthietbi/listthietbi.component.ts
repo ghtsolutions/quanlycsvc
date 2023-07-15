@@ -70,6 +70,7 @@ export class ListthietbiComponent implements OnInit {
   }
   CreateThietbi(data:any)
   {
+    
     this._QrcodeService.createPage(data).subscribe(()=>
     {
       this._QrcodeService.thietbis$.subscribe((data)=>{
