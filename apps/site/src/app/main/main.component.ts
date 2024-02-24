@@ -18,13 +18,14 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  CUser:any={}
-  Ketqua:any={Tieude:''};
-  Detail:any={}
-  IsshowCam:boolean=false;
-  displayedColumns: string[] = ['hinhanh', 'Tieude', 'Mota', 'Ngaytao','qrcode'];
+  CUser: any = {}
+  Ketqua: any = { Tieude: '' };
+  Detail: any = {}
+  IsshowCam: boolean = false;
+  displayedColumns: string[] = ['hinhanh', 'Tieude', 'Mota', 'Ngaytao', 'qrcode'];
   dataSource!: MatTableDataSource<any>;
-  Listdata:any[]=[];
+  Listdata: any[] = [];
+  Lichsudata: any[] = [];
   public showWebcam = true;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -32,21 +33,22 @@ export class MainComponent implements OnInit {
   public webcamImage: WebcamImage | undefined;
   private trigger: Subject<void> = new Subject<void>();
   constructor(
-    private _QrcodeService:QrcodeService,
-    private _LichsuService:LichsuService,
-    private _UsersService:UsersService,
-    private _NotifierService:NotifierService,
-    private dialog:MatDialog,
+    private _QrcodeService: QrcodeService,
+    private _LichsuService: LichsuService,
+    private _UsersService: UsersService,
+    private _NotifierService: NotifierService,
+    private dialog: MatDialog,
     private router: Router,
   ) {
-    this._UsersService.getProfile().subscribe(data=>this.CUser = data)
+    this._LichsuService.getAll().subscribe(data => this.Lichsudata = data)
+    this._UsersService.getProfile().subscribe(data => this.CUser = data)
     this._QrcodeService.getAll().subscribe()
-    this._QrcodeService.thietbis$.subscribe((data)=>
-    {
+    this._QrcodeService.thietbis$.subscribe((data) => {
       this.Listdata = data
+      console.log(this.Listdata);
+
       this.dataSource = new MatTableDataSource(data);
     })
-    
   }
   ngOnInit(): void {
   }
@@ -71,25 +73,35 @@ export class MainComponent implements OnInit {
     }
   }
   onScanSuccess(data: string) {
-    const result = this.Listdata.find(v=>v.id==data)
+    const result = this.Listdata.find(v => v.id == data)
+    const result1 = this.Lichsudata.filter(v => v.idTB == data && v.idUser == this.CUser.id)
     if(result)
     {
-    let dulieu:any={};
-    dulieu.idTao = dulieu.idUser = this.CUser.id
-    dulieu.idTB = result.id
-    dulieu.Type = result.Tinhtrang =!result.Tinhtrang
-    this._QrcodeService.updatePage(result).subscribe();
-    this._LichsuService.createPage(dulieu).subscribe((data)=>
-    {
-        this.router.navigateByUrl('/lichsu'); 
-    })
-    this.stopScanner()
+      console.log(result);
+      
+      if(result.Tinhtrang==0)
+      {
+          let dulieu: any = {};
+          dulieu.idTao = dulieu.idUser = this.CUser.id
+          dulieu.idTB = result.id
+          dulieu.Type = result.Tinhtrang = !result.Tinhtrang
+          this._QrcodeService.updatePage(result).subscribe();
+          this._LichsuService.createPage(dulieu).subscribe((data) => {
+            this.router.navigateByUrl('/lichsu');
+          })
+          this.stopScanner()
+      }
+      else {
+        if (result1 == undefined) {
+          this._NotifierService.notify('error', 'Thiết bị đã được sử dụng bởi nhân viên khác')
+        }
+      }
     }
-    else
-    {
-      this._NotifierService.notify('error','Thiết bị không tồn tại trong hệ thống')
+    else{
+      this._NotifierService.notify('error', 'Thiết bị không tồn tại trong hệ thống')
     }
   }
+  
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -107,12 +119,10 @@ export class MainComponent implements OnInit {
     const dialogRef = this.dialog.open(teamplate, {
     });
   }
-  CreateThietbi(data:any)
-  {
+  CreateThietbi(data: any) {
     this._QrcodeService.createPage(data).subscribe()
   }
-  Today()
-  {
+  Today() {
     return new Date();
   }
   public handleImage(webcamImage: WebcamImage): void {

@@ -1,45 +1,12 @@
-<!-- <div class="flex flex-col">
-  <mat-form-field appearance="outline" class="text-xs w-full">
-    <mat-label>Tìm Kiếm</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
-  </mat-form-field> 
-<div *ngFor="let item of FilterListData" class="p-4 font-bold hover:bg-slate-200 {{item.Type==1?'text-red-600':'text-green-600'}}">
-    {{item.User.Hoten}}({{item.User.SDT}}) - {{item.Thietbi.Tieude}} - {{item.Type==1?"Đang Sử Dụng":"Đã Trả"}}  - {{item.Ngaytao|date:'dd/MM/yyyy'}}
-</div>
-<div *ngIf="FilterListData.length==0">
-        Không Tìm Thấy
-</div>
-
-</div> -->
-
 <div class="!flex flex-col flex-auto min-w-0 relative bg-white">
   <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
     <div class="relative flex flex-col items-center p-3">
-      <div class="text-center text-xl">Lịch Sử</div>
       <div class="p-4 grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
+        <div class="text-center text-xl">Lịch Sử</div>
         <mat-form-field appearance="outline" class="text-xs w-full">
           <mat-label>Tìm Kiếm</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
-        </mat-form-field>
-    
-        <div class="flex flex-row space-x-3 justify-start w-full">
-          <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-            <span class="material-icons text-xl" matTooltip="Tùy Chỉnh">tune</span>
-            <span class="text-xs">Cấu Hình</span>
-          </div>
-          <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-            <span class="material-icons text-xl" matTooltip="Lấy Mẫu">file_download</span>
-            <span class="text-xs">Download</span>
-          </div>
-          <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-            <span class="material-icons text-xl" matTooltip="Upload File">file_upload</span>
-            <span class="text-xs">Upload</span>
-          </div>
-          <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-            <span class="material-icons text-xl" matTooltip="Tạo mới">add_circle</span>
-            <span class="text-xs">Thêm</span>
-          </div>
-        </div>  
+        </mat-form-field> 
       </div>
     </div> 
     <div class="mat-elevation-z8 w-full">

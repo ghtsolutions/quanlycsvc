@@ -15,7 +15,12 @@ import { LichsuService } from '../lichsu.service';
 })
 export class ListthietbiComponent implements OnInit {
   Ketqua:any={Tieude:''};
-  Detail:any={}
+  Detail:any={
+    HSDGio:0,
+    HSDNgay:0,
+    HSDThang:0,
+    HSDNam:0,
+  }
   DVT:any=[
     {id:1,Tieude:'Giờ'},
     {id:2,Tieude:'Ngày'},
@@ -23,7 +28,7 @@ export class ListthietbiComponent implements OnInit {
     {id:4,Tieude:'Năm'}
   ]
   IsshowCam:boolean=false;
-  displayedColumns: string[] = ['qrcode','hinhanh', 'Tieude', 'Mota','Tinhtrang','HSD','Ngaytao'];
+  displayedColumns: string[] = ['qrcode','hinhanh', 'Tieude', 'Mota','Tinhtrang','HSD','NgayHSD','Ngaytao','Action'];
   dataSource!: MatTableDataSource<any>;
   Listdata:any[]=[];
   public showWebcam = true;
@@ -41,8 +46,7 @@ export class ListthietbiComponent implements OnInit {
     this._QrcodeService.thietbis$.subscribe((data)=>
     {
       if(data)
-      {
-        console.log(data);  
+      {  
       this.Listdata = data
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
@@ -70,7 +74,6 @@ export class ListthietbiComponent implements OnInit {
   }
   CreateThietbi(data:any)
   {
-    
     this._QrcodeService.createPage(data).subscribe(()=>
     {
       this._QrcodeService.thietbis$.subscribe((data)=>{
@@ -80,8 +83,12 @@ export class ListthietbiComponent implements OnInit {
        })
     })
   }
-  UpdateThietbi(data:any)
+  async UpdateThietbi(data:any)
   {
+   const result = await this.getHSD(data);
+   data.NgayHSD = result
+   console.log(data.NgayHSD);
+   
     this._QrcodeService.updatePage(data).subscribe(()=>
     {
       this._QrcodeService.thietbis$.subscribe((data)=>{
@@ -91,8 +98,18 @@ export class ListthietbiComponent implements OnInit {
        })
     })
   }
+  async getHSD(data:any) {
+    var cDate = new Date(data.Ngaytao);
+    cDate.setFullYear(cDate.getFullYear() + data.HSDNam);
+    cDate.setMonth(cDate.getMonth() + data.HSDThang);
+    cDate.setDate(cDate.getDate() + data.HSDNgay);
+    cDate.setHours(cDate.getHours() + data.HSDGio);
+    const result = new Date(cDate);
+    return result
+  }
   DeleteThietbi(data:any)
   {
+
     this._QrcodeService.deletePage(data).subscribe(()=>
     {
       this._QrcodeService.thietbis$.subscribe((data)=>{
@@ -101,8 +118,10 @@ export class ListthietbiComponent implements OnInit {
         this.dataSource.sort = this.sort;
        })
     })
+
   }
   Today(){return new Date();}
+
   public handleImage(webcamImage: WebcamImage): void {
     console.info('received webcam image', webcamImage.imageAsDataUrl);
     this.webcamImage = webcamImage;
@@ -114,5 +133,29 @@ export class ListthietbiComponent implements OnInit {
   public get triggerObservable(): Observable<void> {
     return this.trigger.asObservable();
   }
-}
+  
+  GetPercent(begin:any,end:any)
+  { 
+    let Thoigian:number=100;
+    let now = new Date();
+    let startDate = new Date(begin);
+    let endDate = new Date(end);
+    const timeDiff1 = Math.abs(endDate.getTime() - startDate.getTime());
+    const hoursDiff1 = Math.ceil(timeDiff1 / (1000 * 3600));
+    const timeDiff2 = Math.abs(endDate.getTime() - now.getTime());
+    const hoursDiff2 = Math.ceil(timeDiff2 / (1000 * 3600));
+    if(hoursDiff1-hoursDiff2>0)
+    {
+      Thoigian = Number(((1-((hoursDiff1-hoursDiff2)/hoursDiff1))*100).toFixed(2))
+    }
+    if (Thoigian >= 80) {
+      return { time: Thoigian, color: 'warn' };
+    } else if (Thoigian > 50) {
+      return { time: Thoigian, color: 'accent' };
+    } else {
+      return { time: Thoigian, color: 'primary' };
+    }
+    
 
+  }
+}

@@ -23,8 +23,10 @@ import { AuthGuard } from './admin/auth/guards/auth.guard';
 import { CaidatComponent } from './caidat/caidat.component';
 import { LichsuComponent } from './admin/lichsu/lichsu.component';
 import { TrangchuComponent } from './trangchu/trangchu.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 @NgModule({
-  declarations: [	
+  declarations: [			
     AppComponent,
     MainComponent,
     QuetqrcodeComponent,
@@ -32,7 +34,9 @@ import { TrangchuComponent } from './trangchu/trangchu.component';
     DangnhapComponent,
     LichsuComponent,
     CaidatComponent,
-    TrangchuComponent
+    TrangchuComponent,
+    HeaderComponent,
+    FooterComponent
    ],
   imports: [
     ZXingScannerModule,
