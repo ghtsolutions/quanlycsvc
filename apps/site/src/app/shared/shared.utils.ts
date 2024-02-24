@@ -1,4 +1,14 @@
 import { environment } from "../../environments/environment";
+export function ConvertDriveData(data:any){
+  return data.slice(1).map((row:any) => {
+    return {
+      Title: row[0],
+      Danhmuc: row[1],
+      SKU: row[2],
+    };
+  });
+} 
+
 export function GetImage(data:any) {
    if(data)
    {

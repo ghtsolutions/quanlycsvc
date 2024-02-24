@@ -63,6 +63,8 @@ export class ListComponent implements OnInit {
   ) {
     this._usersService.users$.subscribe((data) => {
       this.Users = data;
+      console.log(data);
+      
       this.dataSource = new MatTableDataSource(this.Users);
     });
   }

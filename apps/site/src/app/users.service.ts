@@ -31,6 +31,21 @@ export class UsersService {
   get cauhinhuser$(): Observable<any> {
     return this._cauhinhuser.asObservable();
   }
+  async getDrive() {
+    try {
+      const options = {
+        method:'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/1RyWwzXmkr9grKRMGJJ_WSaHJpB5o6ysrFNY04xVv6QY/values/User?key=AIzaSyCWh10EgrjVBm8qKpnsGOgXrIsT5uqroMc`,options);
+    const data = await response.json();              
+    return data;
+      } catch (error) {
+          return console.error(error);
+      }
+  }
   getUsers(): Observable<any[]> {
     return this._httpClient.get<any[]>(`${this.APIURL}/test_users`).pipe(
       tap((ves: any[]) => {

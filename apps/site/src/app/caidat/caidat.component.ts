@@ -4,6 +4,7 @@ import { NotifierService } from 'angular-notifier';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ConvertDriveData } from '../shared/shared.utils';
 
 @Component({
   selector: 'app-caidat',
@@ -12,6 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class CaidatComponent implements OnInit {
   User:any={}
+  ListCloud:any[]=[]
   displayedColumns: string[] = ['Hoten', 'email', 'SDT'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -22,12 +24,22 @@ export class CaidatComponent implements OnInit {
   ) {
     this._UsersService.getUsers().subscribe(data=>
       {
+        console.log(data);
         this.dataSource = new MatTableDataSource(data);
       })
+      this._UsersService.users$.subscribe((data)=>{if(data){this.User = data}})
    }
 
   ngOnInit() {
 
+  }
+  async LoadDrive()
+  {
+    const data = await this._UsersService.getDrive();
+    this.ListCloud =  ConvertDriveData(data.values)
+    console.log(this.ListCloud);
+    
+    this.dataSource = new MatTableDataSource(this.ListCloud);    
   }
   Dangky(User:any)
   {
