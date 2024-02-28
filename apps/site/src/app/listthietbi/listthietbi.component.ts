@@ -37,6 +37,8 @@ export class ListthietbiComponent implements OnInit {
   @ViewChild('canvas') canvas!: ElementRef;
   public webcamImage: WebcamImage | undefined;
   private trigger: Subject<void> = new Subject<void>();
+  SanphamsDrive:any[]=[]
+  FilterLists:any[]=[]
   constructor(
     private _QrcodeService:QrcodeService,
     private _LichsuService:LichsuService,
@@ -155,7 +157,9 @@ export class ListthietbiComponent implements OnInit {
     } else {
       return { time: Thoigian, color: 'primary' };
     }
-    
-
   }
+  writeExcelFile(){}
+  readExcelFile(e:any){}
+  LoadDrive(){}
+  SyncDrive(){}
 }

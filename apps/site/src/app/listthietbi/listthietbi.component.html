@@ -1,30 +1,69 @@
 <div class="!flex flex-col flex-auto min-w-0 relative bg-white">
   <div class="relative flex flex-col  items-center p-3">
-    <div class="text-center text-xl">Danh Sách Thiết Bị</div>
-    <div class="p-4 grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
+    <div class="text-center text-xl font-bold">Danh Sách Thiết Bị</div>
+    <div class="p-4 flex flex-row space-x-2 items-center justify-between">
       <mat-form-field appearance="outline" class="text-xs w-full">
         <mat-label>Tìm Kiếm</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
       </mat-form-field>
-  
-      <div class="flex flex-row space-x-3 justify-start w-full">
-        <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-          <span class="material-icons text-xl" matTooltip="Tùy Chỉnh">tune</span>
-          <span class="text-xs">Cấu Hình</span>
-        </div>
-        <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-          <span class="material-icons text-xl" matTooltip="Lấy Mẫu">file_download</span>
+      <div class="lg:hidden flex">
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <div (click)="writeExcelFile()" class="flex flex-row space-x-2 items-center justify-center">
+              <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_download</span>
+              <span class="text-xs">Download</span>
+            </div>
+          </button>
+          <button mat-menu-item>
+            <div (click)="uploadfile.click()" class="flex flex-row space-x-2 items-center justify-center">
+              <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
+              <span class="text-xs">Upload</span>
+              <input class="hidden" (change)="readExcelFile($event)" type="file" #uploadfile>
+            </div>
+          </button>
+          <button mat-menu-item>
+            <div (click)="LoadDrive()" class="flex flex-row space-x-2 items-center justify-center">
+              <span class="material-symbols-outlined text-xl" matTooltip="Drive">cloud_download</span>
+              <span class="text-xs">Drive ({{SanphamsDrive.length}})</span> 
+            </div>
+          </button>
+          <button mat-menu-item>
+            <div (click)="SyncDrive()"
+            class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+            <span class="material-symbols-outlined text-xl" matTooltip="Drive">cloud_sync</span>
+            <span class="text-xs">Sync ({{FilterLists.length||0}}/{{SanphamsDrive.length||0}})</span>
+          </div>
+          </button>
+        </mat-menu>
+      </div>
+      <div class="hidden lg:flex flex-row space-x-3">
+        <div 
+          class="flex flex-col items-center p-2 hover:bg-gray-200 rounded-lg">
+          <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_download</span>
           <span class="text-xs">Download</span>
         </div>
-        <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg">
-          <span class="material-icons text-xl" matTooltip="Upload File">file_upload</span>
+        <div (click)="uploadfile.click()"
+          class="flex flex-col items-center p-2 hover:bg-gray-200 rounded-lg">
+          <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
           <span class="text-xs">Upload</span>
+          <input class="hidden"  type="file" #uploadfile>
         </div>
-        <div class="flex flex-col items-center space-x-2 p-2 hover:bg-gray-200 rounded-lg" (click)="openDialog(dialogXoaBaiviet);Detail={}">
-          <span class="material-icons text-xl" matTooltip="Tạo mới">add_circle</span>
-          <span class="text-xs">Thêm</span>
+        <div 
+          class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+          <span class="material-symbols-outlined text-xl" matTooltip="Drive">cloud_download</span>
+          <span class="text-xs">Drive</span>              
         </div>
-      </div>  
+        <div 
+        class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+        <span class="material-symbols-outlined text-xl" matTooltip="Drive">cloud_sync</span>
+        <span class="text-xs">Sync </span>
+      </div>
+        <div (click)="openDialog(dialogXoaBaiviet);Detail={}"
+        class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+        <span class="material-symbols-outlined text-xl" matTooltip="Drive">add_circle</span>
+        <span class="text-xs">Thêm Mới</span>
+      </div>
+      </div>
     </div>
   </div>
   <div class="relative h-full w-full overflow-auto flex flex-col">
@@ -58,18 +97,20 @@
         </ng-container>
         <ng-container matColumnDef="HSD">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Hạn Sử Dụng </th>
-          <td mat-cell *matCellDef="let row"> 
-            <div  class="flex flex-col space-y-3">
-            <div>{{row.HSDGio}} Giờ
-              {{row.HSDNgay}} Ngày
-              {{row.HSDThang}} Tháng
-              {{row.HSDNam}} Năm
+          <td mat-cell *matCellDef="let row">
+            <div class="flex flex-col space-y-3">
+              <div>{{row.HSDGio}} Giờ
+                {{row.HSDNgay}} Ngày
+                {{row.HSDThang}} Tháng
+                {{row.HSDNam}} Năm
+              </div>
+              <div class="w-1/2">
+                <mat-progress-bar matTooltip="{{GetPercent(row.NgayHSD,row.Ngaytao).time}}%"
+                  [color]="GetPercent(row.NgayHSD,row.Ngaytao).color" mode="determinate"
+                  [value]="GetPercent(row.NgayHSD,row.Ngaytao).time"></mat-progress-bar>
+                <div>{{GetPercent(row.NgayHSD,row.Ngaytao).time}}%</div>
+              </div>
             </div>
-            <div class="w-1/2">
-              <mat-progress-bar matTooltip="{{GetPercent(row.NgayHSD,row.Ngaytao).time}}%" [color]="GetPercent(row.NgayHSD,row.Ngaytao).color" mode="determinate" [value]="GetPercent(row.NgayHSD,row.Ngaytao).time"></mat-progress-bar>
-              <div>{{GetPercent(row.NgayHSD,row.Ngaytao).time}}%</div>
-            </div>
-          </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="NgayHSD">
@@ -82,16 +123,19 @@
         </ng-container>
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Xoá </th>
-          <td mat-cell *matCellDef="let row">    
-           <button mat-icon-button class="bg-red-400 hover:bg-red-600 text-white" (click)="DeleteThietbi(row)"><span class="material-icons">delete</span></button>  </td>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button class="bg-red-400 hover:bg-red-600 text-white" (click)="DeleteThietbi(row)"><span
+                class="material-icons">delete</span></button>
+          </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(dialogXoaBaiviet);Detail=row"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(dialogXoaBaiviet);Detail=row">
+        </tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="4">Không Tìm Thấy "{{input.value}}"</td>
         </tr>
       </table>
-  
+
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
     </div>
   </div>
@@ -104,7 +148,7 @@
     <ng-template #elseTemplate>
       Cập Nhật Thiết BỊ
     </ng-template>
-</div>
+  </div>
   <div mat-dialog-content class="text-center">
     <div class="flex lg:flex-row flex-col lg:space-x-3 max-full">
       <div class="flex flex-col space-y-3">
@@ -120,11 +164,13 @@
       <div class="flex flex-col w-full space-y-3">
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Tiêu Đề</mat-label>
-          <input class="w-full" matInput [(ngModel)]="Detail.Tieude" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề">
+          <input class="w-full" matInput [(ngModel)]="Detail.Tieude" [ngModelOptions]="{standalone: true}"
+            placeholder="Tiêu Đề">
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Mô Tả</mat-label>
-          <input class="w-full" matInput [(ngModel)]="Detail.Mota" [ngModelOptions]="{standalone: true}" placeholder="Mô Tả">
+          <input class="w-full" matInput [(ngModel)]="Detail.Mota" [ngModelOptions]="{standalone: true}"
+            placeholder="Mô Tả">
         </mat-form-field>
         <div class="grid grid-cols-2 gap-2">
           <mat-form-field appearance="outline">
@@ -152,11 +198,11 @@
     <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
     <ng-container *ngIf="Detail.id; else elseTemplate1">
       <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true"
-      (click)="UpdateThietbi(Detail)">Cập Nhật</button>
+        (click)="UpdateThietbi(Detail)">Cập Nhật</button>
     </ng-container>
     <ng-template #elseTemplate1>
       <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true"
-      (click)="CreateThietbi(Detail)">Đồng Ý</button>
+        (click)="CreateThietbi(Detail)">Đồng Ý</button>
     </ng-template>
   </div>
 </ng-template>
