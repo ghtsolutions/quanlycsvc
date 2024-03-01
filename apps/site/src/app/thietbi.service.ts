@@ -32,6 +32,24 @@ export class QrcodeService {
       })
     );
   }
+  async getDrive() {
+    try {
+      const options = {
+        method:'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/1RyWwzXmkr9grKRMGJJ_WSaHJpB5o6ysrFNY04xVv6QY/values/Thietbi?key=AIzaSyCWh10EgrjVBm8qKpnsGOgXrIsT5uqroMc`,options);
+    const data = await response.json();  
+    console.log(data);
+    
+          //this._sanphams.next(data)                 
+    return data;
+      } catch (error) {
+          return console.error(error);
+      }
+  }
   createPage(dulieu: any): Observable<any> {
     return this.thietbis$.pipe(
       take(1),

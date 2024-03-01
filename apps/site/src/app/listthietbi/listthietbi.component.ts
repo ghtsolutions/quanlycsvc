@@ -63,6 +63,7 @@ export class ListthietbiComponent implements OnInit {
   @ViewChild('scanner', { static: false })
   scanner: ZXingScannerComponent = new ZXingScannerComponent;
   selectedDevice: MediaDeviceInfo | undefined;
+  SelectItem: any={};
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -71,6 +72,11 @@ export class ListthietbiComponent implements OnInit {
     }
   }
   openDialog(teamplate: TemplateRef<any>): void {
+    const dialogRef = this.dialog.open(teamplate, {
+    });
+  }
+  openZoomDialog(teamplate: TemplateRef<any>,item:any): void {
+    this.SelectItem = item
     const dialogRef = this.dialog.open(teamplate, {
     });
   }
@@ -159,7 +165,25 @@ export class ListthietbiComponent implements OnInit {
     }
   }
   writeExcelFile(){}
-  readExcelFile(e:any){}
-  LoadDrive(){}
-  SyncDrive(){}
+  readExcelFile(e:any){
+    console.log(e);
+    
+  }
+  async LoadDrive(){
+   const data = await this._QrcodeService.getDrive()
+   this.SanphamsDrive = data.values.slice(1).map((row:any) => {
+    return {
+      Tieude: row[1],
+      Mota: row[4],
+    };
+    });
+    console.log(this.SanphamsDrive);
+  }
+  SyncDrive(){
+    this.SanphamsDrive.forEach((v:any)=>
+    {
+      this._QrcodeService.createPage(v).subscribe()
+    })
+   
+  }
 }
