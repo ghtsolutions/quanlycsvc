@@ -1,4 +1,4 @@
-<div class="!flex flex-col flex-auto min-w-0 relative">
+<div class="!flex flex-col flex-auto min-w-0 relative p-4">
   <!-- <div class="relative border-b-2 flex flex-row justify-between items-center p-3">
       <span class="material-icons p-2 hover:bg-gray-200 rounded-full">
         arrow_back
@@ -11,12 +11,14 @@
   <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between lg:p-4">
     <div class="flex justify-center flex-wrap h-full g-6 text-gray-800">
       <div class="w-full">
+        <div class="text-center">Chào, <strong>{{CUser.Hoten}} !</strong></div>
         <div class="flex flex-col space-y-3 w-full shadow-lg rounded-lg bg-white p-3">
           <router-outlet></router-outlet>
           <div *ngIf="isActive('/')">
-            <div class="text-center">Chào, {{CUser.Hoten}} !</div>
             <ng-container *ngIf="IsshowCam; else elseTemplate">
-              <zxing-scanner #scanner (scanSuccess)="onScanSuccess($event)"></zxing-scanner>
+              <div class="w-96">
+                <zxing-scanner #scanner (scanSuccess)="onScanSuccess($event)"></zxing-scanner>
+              </div>
             </ng-container>
             <ng-template #elseTemplate>
               <div class="p-3 text-red-500 text-center" *ngIf="Ketqua.Tieude">
@@ -28,9 +30,45 @@
       </div>
     </div>
   </div>
-  <div
+
+
+
+  <div class="z-10 fixed lg:relative bottom-0 right-0 flex flex-row space-x-3 justify-center items-center w-full shadow-lg bg-white p-3">
+    <div routerLink="taikhoan" class="flex flex-col space-y-1 justify-center items-center hover:bg-blue-500 hover:text-white bg-slate-100 p-2 rounded-lg">
+     <span class="material-symbols-outlined">account_circle</span>
+      <div class="text-xs">Tài Khoản</div>
+    </div>
+    <div routerLink="lichsu" class="flex flex-col space-y-1 
+    justify-center items-center hover:bg-blue-500 hover:text-white 
+    {{isActive('/lichsu')?'bg-blue-500 text-white':'bg-slate-100'}} 
+    p-2 rounded-lg">
+     <span class="material-symbols-outlined">history</span>
+      <div class="text-xs">Lịch Sử</div>
+    </div>
+    <div button (click)="startScanner()" *ngIf="isActive('/')" class="flex flex-col space-y-1 justify-center items-center hover:bg-blue-500 hover:text-white bg-slate-100 p-4 rounded-lg">
+     <span class="material-symbols-outlined">qr_code_scanner</span>
+    </div>
+    <div routerLink="/" *ngIf="!isActive('/')" class="flex flex-col space-y-1 justify-center items-center hover:bg-blue-500 hover:text-white bg-slate-100 p-2 rounded-lg">
+     <span class="material-symbols-outlined">home</span>
+     <div class="text-xs">Trang Chủ</div>
+    </div>
+    <div routerLink="thietbi" class="flex flex-col space-y-1 justify-center items-center hover:bg-blue-500 hover:text-white bg-slate-100 p-2 rounded-lg">
+     <span class="material-symbols-outlined">devices_other</span>
+      <div class="text-xs">Thiết bị</div>
+    </div>
+    <div routerLink="caidat" class="flex flex-col space-y-1 justify-center items-center hover:bg-blue-500 hover:text-white bg-slate-100 p-2 rounded-lg">
+     <span class="material-symbols-outlined">manufacturing</span>
+      <div class="text-xs">Cài đặt</div>
+    </div>
+  </div>
+
+  <!-- <div
     class="z-10 fixed lg:relative bottom-0 right-0 flex flex-row space-x-3 justify-center items-center w-full shadow-lg bg-white p-3">
-    <div><button mat-raised-button routerLink="lichsu" [color]="isActive('/lichsu') ? 'primary' : null">Lịch Sử</button>
+    <div>
+      <button mat-raised-button routerLink="lichsu" [color]="isActive('/lichsu') ? 'primary' : null">Lịch Sử</button>
+    </div>
+    <div>
+      <button mat-raised-button routerLink="lichsu" [color]="isActive('/lichsu') ? 'primary' : null">Lịch Sử</button>
     </div>
     <div><button [disabled]="IsshowCam" mat-fab color="primary" (click)="startScanner()" *ngIf="isActive('/')">
         <span class="material-icons">qr_code_scanner</span></button></div>
@@ -40,5 +78,5 @@
         Bị</button></div>
     <div><button mat-raised-button routerLink="caidat" [color]="isActive('/caidat') ? 'primary' : null">Cài Đặt</button>
     </div>
-  </div>
+  </div> -->
 </div>

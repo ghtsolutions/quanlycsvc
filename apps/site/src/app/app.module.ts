@@ -25,6 +25,7 @@ import { LichsuComponent } from './admin/lichsu/lichsu.component';
 import { TrangchuComponent } from './trangchu/trangchu.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { TaikhoanSiteComponent } from './taikhoan/taikhoan-site/taikhoan-site.component';
 @NgModule({
   declarations: [			
     AppComponent,
@@ -72,6 +73,10 @@ import { FooterComponent } from './footer/footer.component';
           {
             path: 'lichsu',
             component: LichsuComponent
+          },
+          {
+            path: 'taikhoan',
+            component: TaikhoanSiteComponent
           },
         ]
       },
