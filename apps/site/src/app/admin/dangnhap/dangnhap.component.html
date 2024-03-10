@@ -1,4 +1,4 @@
-<section class="h-full gradient-form bg-gray-200">
+<!-- <section class="h-full gradient-form bg-gray-200">
   <div class="container py-12 px-6 h-full m-auto">
     <div class="flex justify-center flex-wrap h-full g-6 text-gray-800">
       <div class="xl:w-6/12 w-full">
@@ -23,7 +23,6 @@
                         vpn_key
                       </span></mat-icon>
                   </mat-form-field>
-                  <!-- <div> <a class="text-[#3154A1] font-bold" [routerLink]="['/quenmatkhau']">Quên Mật Khẩu ?</a></div> -->
                   <div class="text-center pt-1 mb-12 pb-1">
                     <button mat-raised-button color="primary" (click)="Dangnhap(User)">Đăng Nhập</button>
                   </div>
@@ -35,4 +34,31 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
+<div class="p-4">
+  <div class="container lg:max-w-lg lg:m-auto rounded-lg border p-8 flex flex-col space-y-6 bg-white ">
+    <div class="flex flex-col space-y-2">
+      <img src="/assets/img/logo-vuong.png" class="p-3 mx-auto">
+      <span class="text-center font-bold">TRƯỜNG CAO ĐẲNG NGHỀ TP.HỒ CHÍ MINH</span>
+    </div>
+
+    <span class="text-xl font-bold text-center uppercase">Đăng nhập</span>
+    <div class="flex flex-col space-y-2 lg:w-2/3 w-full mx-auto">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Số Điện Thoại</mat-label>
+        <input [(ngModel)]="User.SDT" [ngModelOptions]="{standalone: true}" type="text" matInput
+          class="w-full px-3 py-2 border border-gray-200 rounded" [placeholder]="'Số Điện Thoại'" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Mật Khẩu</mat-label>
+        <input [(ngModel)]="User.password" [ngModelOptions]="{standalone: true}" type="text" matInput
+          class="w-full px-3 py-2 border border-gray-200 rounded" [placeholder]="'Mật Khẩu'" />
+      </mat-form-field>
+      <div class="flex justify-center">
+        <!-- <button mat-flat-button color="primary">Đăng Nhập</button> -->
+        <button (click)="Dangnhap(User)" mat-flat-button color="primary">Đăng Nhập</button>
+      </div>
+
+    </div>
+  </div>
+</div>

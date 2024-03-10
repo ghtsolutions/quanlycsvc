@@ -10,3 +10,8 @@ npx ngh --dir=dist/apps/site  --no-silent
 git add .
 git commit -m "update"
 git push
+
+### Git CLI
+git add .
+git commit -m "update"
+git push
